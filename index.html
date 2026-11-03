@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>توفيكو 2026 - سودوكو الفضاء</title>
   
   <link rel="manifest" href='data:application/json,{"name":"توفيكو 2026 - سودوكو","short_name":"توفيكو 2026","start_url":".","display":"standalone","background_color":"#060913","theme_color":"#060913","icons":[{"src":"https://i.ibb.co/gb6V2Kkr/t-a-f-00720261016-101616-copy-320x320.jpg","sizes":"512x512","type":"image/png"}]}'>
@@ -14,17 +14,24 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Tajawal', sans-serif;
       background-color: #060913;
       color: #e2e8f0;
       user-select: none;
       -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
     }
     
     .profile-avatar-gold {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       border: 4px solid #f59e0b;
       box-shadow: 0 0 20px #f59e0b, inset 0 0 15px #fbbf24;
@@ -33,39 +40,59 @@
     }
 
     @keyframes pulseGlowGold {
-      0% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7), inset 0 0 10px rgba(251, 191, 36, 0.5); }
-      50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(245, 158, 11, 1), inset 0 0 20px rgba(251, 191, 36, 0.9); }
-      100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7), inset 0 0 10px rgba(251, 191, 36, 0.5); }
+      0% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7); }
+      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(245, 158, 11, 1); }
+      100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7); }
     }
 
-    .cell-highlight-crosshair { background-color: rgba(56, 189, 248, 0.12) !important; }
-    .cell-selected { background-color: rgba(56, 189, 248, 0.35) !important; box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.6); }
-    .cell-same-number { background-color: rgba(168, 85, 247, 0.25) !important; }
-    .cell-correct { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80 !important; border-color: rgba(34, 197, 94, 0.5) !important; }
-    .cell-wrong { background-color: rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; border-color: rgba(239, 68, 68, 0.7) !important; animation: shakeError 0.3s ease-in-out; }
-    @keyframes shakeError { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+    /* 9x9 Sudoku Grid Layout Precision */
+    .sudoku-container {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      grid-template-rows: repeat(9, 1fr);
+      direction: ltr; /* Keeps grid indices standard left-to-right */
+    }
+
+    .sudoku-cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.125rem;
+      cursor: pointer;
+      border: 1px solid rgba(30, 41, 59, 0.8);
+      background-color: rgba(15, 23, 42, 0.6);
+      transition: all 0.15s ease;
+    }
+
+    /* Strict 3x3 Block Thicker Boundaries */
+    .border-b-thick { border-bottom: 2.5px solid #38bdf8 !important; }
+    .border-r-thick { border-right: 2.5px solid #38bdf8 !important; }
+
+    /* Highlights */
+    .cell-highlight-crosshair { background-color: rgba(56, 189, 248, 0.15) !important; }
+    .cell-selected { background-color: rgba(56, 189, 248, 0.4) !important; box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.8); }
+    .cell-same-number { background-color: rgba(168, 85, 247, 0.3) !important; }
+    .cell-correct { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80 !important; font-weight: 900; }
+    .cell-wrong { background-color: rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; animation: shakeError 0.3s ease-in-out; }
+    
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
     .backdrop-blur-custom { backdrop-filter: blur(8px); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center overflow-x-hidden relative pt-12 pb-16">
+<body class="min-h-screen flex flex-col justify-between items-center relative py-2">
 
   <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
-  <!-- BEGIN AADS AD UNIT 2460898 (رأس الصفحة) -->
-  <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;top:0;left:0;right:0;margin:auto;z-index:9000;background:rgba(6,9,19,0.95);backdrop-filter:blur(5px);border-bottom:1px solid rgba(56,189,248,0.2);padding:2px 0;">
-    <input autocomplete="off" type="checkbox" id="aadsstickymw0c0n6b" hidden />
-    <label for="aadsstickymw0c0n6b" style="top: 50%;transform: translateY(-50%);right:12px; position: absolute;border-radius: 4px; background: rgba(248, 248, 249, 0.70); padding: 3px;z-index: 9001;cursor:pointer">
-      <svg fill="#000000" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490">
-        <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "/>
-      </svg>
-    </label>
-    <div style="width: 100%;margin: auto;position: relative;"><iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div>
-    <style> #aadsstickymw0c0n6b:checked ~ div, #aadsstickymw0c0n6b:checked { display: none; } </style>
-  </div>
-  <!-- END AADS AD UNIT -->
-
   <!-- PWA Install Banner -->
-  <div id="pwaInstallBanner" class="w-full bg-gradient-to-r from-cyan-900/90 via-slate-900/90 to-indigo-900/90 border-b border-cyan-500/40 p-2 z-40 backdrop-blur-md flex items-center justify-between shadow-lg">
+  <div id="pwaInstallBanner" class="w-full max-w-md bg-gradient-to-r from-cyan-900/90 via-slate-900/90 to-indigo-900/90 border border-cyan-500/40 p-2 rounded-xl z-40 backdrop-blur-md flex items-center justify-between shadow-lg my-1">
     <div class="flex items-center gap-2">
       <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-xs">
         <i class="fa-solid fa-download"></i>
@@ -81,11 +108,15 @@
     </div>
   </div>
 
+  <!-- AADS Top Banner (Non-Overlapping Layout) -->
+  <div class="w-full max-w-md z-20 my-1 text-center overflow-hidden rounded-xl bg-slate-900/80 border border-cyan-500/20 py-1">
+    <iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:100%; height:60px; overflow:hidden; margin: auto;'></iframe>
+  </div>
+
   <!-- Landing Screen With Profile Avatar -->
   <div id="landingScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
     <div class="max-w-md w-full bg-slate-900/90 border border-cyan-500/30 rounded-3xl p-6 text-center shadow-2xl flex flex-col items-center">
       
-      <!-- Profile Avatar Image (Fixed Direct Link) -->
       <div class="relative my-3 flex items-center justify-center">
         <img src="https://i.ibb.co/gb6V2Kkr/t-a-f-00720261016-101616-copy-320x320.jpg" alt="Tofiko 2026" class="profile-avatar-gold">
       </div>
@@ -143,72 +174,72 @@
 
   <!-- Main Game Container -->
   <main class="w-full max-w-md flex flex-col items-center px-2 z-10 my-auto">
-    <div class="w-full bg-slate-900/80 border border-cyan-500/30 rounded-2xl p-3 mb-3 flex items-center justify-between shadow-lg">
+    
+    <!-- Top Game Bar -->
+    <div class="w-full bg-slate-900/90 border border-cyan-500/30 rounded-2xl p-2.5 mb-2 flex items-center justify-between shadow-lg">
       <div class="flex items-center gap-2">
-        <button id="btnLightning" onclick="toggleLightning()" class="w-9 h-9 rounded-xl bg-slate-800 border border-amber-500/40 text-amber-400 flex items-center justify-center shadow">
-          <i class="fa-solid fa-bolt text-lg"></i>
+        <button id="btnLightning" onclick="toggleLightning()" class="w-8 h-8 rounded-xl bg-slate-800 border border-amber-500/40 text-amber-400 flex items-center justify-center shadow">
+          <i class="fa-solid fa-bolt text-base"></i>
         </button>
         <div>
-          <h2 class="text-sm font-bold text-cyan-300" id="currentLevelName">مستوى خبير</h2>
+          <h2 class="text-xs font-bold text-cyan-300" id="currentLevelName">مستوى خبير</h2>
           <span class="text-[10px] text-slate-400" id="timer">00:00</span>
         </div>
       </div>
-      <div class="flex items-center gap-4 text-xs">
+      <div class="flex items-center gap-3 text-xs">
         <div class="text-center">
-          <span class="block text-slate-400 text-[10px]">الأخطاء</span>
+          <span class="block text-slate-400 text-[9px]">الأخطاء</span>
           <span class="font-bold text-rose-400" id="mistakes">0/3</span>
         </div>
         <div class="text-center">
-          <span class="block text-slate-400 text-[10px]">النقاط</span>
+          <span class="block text-slate-400 text-[9px]">النقاط</span>
           <span class="font-bold text-amber-300" id="score">1000</span>
         </div>
       </div>
     </div>
 
-    <!-- Sudoku Grid (9x9) -->
-    <div id="sudokuGrid" class="w-full aspect-square bg-slate-950 border-2 border-cyan-500/50 rounded-2xl grid grid-cols-9 p-1 gap-0.5 shadow-2xl relative overflow-hidden"></div>
+    <!-- Perfect 9x9 Sudoku Grid -->
+    <div id="sudokuGrid" class="w-full aspect-square bg-slate-950 border-2 border-cyan-500/60 rounded-2xl sudoku-container p-0.5 shadow-2xl relative overflow-hidden"></div>
 
-    <!-- Action Tools Bar -->
-    <div class="w-full grid grid-cols-4 gap-2 my-3">
-      <button onclick="undo()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
-        <i class="fa-solid fa-rotate-left text-slate-300 text-base mb-1 block"></i>
-        <span class="text-[11px] text-slate-400 block">تراجع</span>
+    <!-- Control Buttons -->
+    <div class="w-full grid grid-cols-4 gap-2 my-2">
+      <button onclick="undo()" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2 text-center active:scale-95">
+        <i class="fa-solid fa-rotate-left text-slate-300 text-sm mb-0.5 block"></i>
+        <span class="text-[10px] text-slate-400 block">تراجع</span>
       </button>
-      <button onclick="erase()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
-        <i class="fa-solid fa-eraser text-slate-300 text-base mb-1 block"></i>
-        <span class="text-[11px] text-slate-400 block">مسح</span>
+      <button onclick="erase()" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2 text-center active:scale-95">
+        <i class="fa-solid fa-eraser text-slate-300 text-sm mb-0.5 block"></i>
+        <span class="text-[10px] text-slate-400 block">مسح</span>
       </button>
-      <button id="btnNotes" onclick="toggleNotes()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95 relative">
-        <i class="fa-solid fa-pen text-slate-300 text-base mb-1 block"></i>
-        <span class="text-[11px] text-slate-400 block">مسودة</span>
+      <button id="btnNotes" onclick="toggleNotes()" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2 text-center active:scale-95 relative">
+        <i class="fa-solid fa-pen text-slate-300 text-sm mb-0.5 block"></i>
+        <span class="text-[10px] text-slate-400 block">مسودة</span>
         <span id="notesBadge" class="absolute top-1 left-1 w-2 h-2 rounded-full bg-slate-600"></span>
       </button>
-      <button onclick="getHint()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
-        <i class="fa-solid fa-lightbulb text-amber-400 text-base mb-1 block"></i>
-        <span class="text-[11px] text-slate-400 block">تلميح</span>
+      <button onclick="getHint()" class="bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2 text-center active:scale-95">
+        <i class="fa-solid fa-lightbulb text-amber-400 text-sm mb-0.5 block"></i>
+        <span class="text-[10px] text-slate-400 block">تلميح</span>
       </button>
     </div>
 
-    <!-- Cosmic Numpad -->
-    <div class="w-full grid grid-cols-9 gap-1 mb-2">
-      <button onclick="inputNumber(1)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">1</button>
-      <button onclick="inputNumber(2)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">2</button>
-      <button onclick="inputNumber(3)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">3</button>
-      <button onclick="inputNumber(4)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">4</button>
-      <button onclick="inputNumber(5)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">5</button>
-      <button onclick="inputNumber(6)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">6</button>
-      <button onclick="inputNumber(7)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">7</button>
-      <button onclick="inputNumber(8)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">8</button>
-      <button onclick="inputNumber(9)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">9</button>
+    <!-- Visible Numpad (1 to 9) -->
+    <div class="w-full grid grid-cols-9 gap-1 mb-1">
+      <button onclick="inputNumber(1)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">1</button>
+      <button onclick="inputNumber(2)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">2</button>
+      <button onclick="inputNumber(3)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">3</button>
+      <button onclick="inputNumber(4)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">4</button>
+      <button onclick="inputNumber(5)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">5</button>
+      <button onclick="inputNumber(6)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">6</button>
+      <button onclick="inputNumber(7)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">7</button>
+      <button onclick="inputNumber(8)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">8</button>
+      <button onclick="inputNumber(9)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">9</button>
     </div>
   </main>
 
-  <!-- BEGIN AADS AD UNIT 2460898 (إعلان أسفل الصفحة) -->
-  <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;bottom:0;left:0;right:0;margin:auto;z-index:9000;background:rgba(6,9,19,0.95);backdrop-filter:blur(5px);border-top:1px solid rgba(56,189,248,0.2);padding:2px 0;">
-    <div style="width: 100%;margin: auto;position: relative;"><iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div>
+  <!-- AADS Bottom Banner (Clean Non-Overlapping Position) -->
+  <div class="w-full max-w-md z-20 my-1 text-center overflow-hidden rounded-xl bg-slate-900/80 border border-cyan-500/20 py-1">
+    <iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:100%; height:60px; overflow:hidden; margin: auto;'></iframe>
   </div>
-  <!-- END AADS AD UNIT -->
-
     <script>
     // Audio Engine
     let audioCtx = null;
@@ -261,7 +292,7 @@
 
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'tofiko-2026-v6';
+        const CACHE_NAME = 'tofiko-2026-v7';
         self.addEventListener('install', (e) => {
           e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
         });
@@ -280,7 +311,7 @@
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = Array.from({length: 70}, () => ({
+      stars = Array.from({length: 60}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         r: Math.random() * 1.5,
@@ -313,7 +344,7 @@
     }
     updatePlayersCount();
 
-    // Game State & 9x9 Board Data
+    // Strict 9x9 Sudoku Board State & Arrays
     let selectedCellIndex = null;
     let isNotesMode = false;
     let isLightningActive = true;
@@ -339,10 +370,10 @@
       6,7,5, 1,9,8, 2,3,4,
       3,5,4, 8,1,7, 9,6,2,
       2,8,9, 4,5,3, 1,6,7,
-      7,6,1, 2,6,9, 3,4,5,
+      7,6,1, 2,4,9, 3,8,5,
       4,1,7, 9,3,2, 6,8,5,
-      5,2,8, 5,4,6, 7,1,9,
-      1,9,6, 3,8,1, 4,5,3
+      5,2,8, 5,7,6, 9,1,3,
+      1,9,6, 3,8,1, 4,2,7
     ];
 
     let currentBoard = [...initialBoard];
@@ -357,10 +388,15 @@
         const row = Math.floor(i / 9);
         const col = i % 9;
         
-        cell.className = `relative aspect-square flex items-center justify-center font-bold text-lg cursor-pointer transition-all duration-150 rounded-md border border-slate-800/40`;
-        
-        if (col % 3 === 2 && col !== 8) cell.classList.add('border-r-2', 'border-r-cyan-500/70');
-        if (row % 3 === 2 && row !== 8) cell.classList.add('border-b-2', 'border-b-cyan-500/70');
+        cell.className = 'sudoku-cell';
+
+        // Strict 3x3 Block Boundary Formatting
+        if (row === 2 || row === 5) {
+          cell.classList.add('border-b-thick');
+        }
+        if (col === 2 || col === 5) {
+          cell.classList.add('border-r-thick');
+        }
 
         if (currentBoard[i] !== 0) {
           cell.innerText = currentBoard[i];
@@ -504,7 +540,6 @@
       playTone(950, 'sine', 0.15);
     }
 
-    // Modal & Button Listeners Fixed
     document.getElementById('btnOpenLevels').onclick = () => {
       initAudio();
       document.getElementById('levelsModal').classList.remove('hidden');
