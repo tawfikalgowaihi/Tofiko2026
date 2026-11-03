@@ -4,13 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>توفيكو 2026 - سودوكو الفضاء</title>
-  
-  <!-- PWA Web App Manifest for Offline Support & Installation -->
-  <link rel="manifest" href='data:application/json,{"name":"توفيكو 2026 - سودوكو","short_name":"توفيكو 2026","start_url":".","display":"standalone","background_color":"#060913","theme_color":"#060913","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1046/1046857.png","sizes":"512x512","type":"image/png"}]}'>
-  <meta name="theme-color" content="#060913">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -52,27 +45,6 @@
 
   <!-- Dynamic Starfield Canvas Background -->
   <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
-
-  <!-- PWA Install Banner Bar (Top of the Page) -->
-  <div id="pwaInstallBanner" class="w-full bg-gradient-to-r from-cyan-900/90 via-slate-900/90 to-indigo-900/90 border-b border-cyan-500/40 p-2.5 z-40 backdrop-blur-md flex items-center justify-between shadow-lg">
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-sm">
-        <i class="fa-solid fa-download"></i>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold text-cyan-200">تثبيت لعبة توفيكو 2026</h4>
-        <p class="text-[10px] text-slate-300">العب في أي وقت بدون إنترنت ⚡</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-1.5">
-      <button id="btnInstallPwa" onclick="installApp()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-1">
-        <i class="fa-solid fa-mobile-screen-button"></i> تثبيت
-      </button>
-      <button onclick="closeInstallBanner()" class="text-slate-400 hover:text-white p-1 text-xs">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-  </div>
 
   <!-- Landing Screen (Welcome Page) -->
   <div id="landingScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
@@ -217,56 +189,9 @@
       <i class="fa-solid fa-rectangle-ad text-slate-500"></i>
     </div>
   </div>
-    <!-- Offline Service Worker Registration & Game Logic -->
+
+  <!-- Game Logic Script -->
   <script>
-    // Offline Cache & PWA Installation Logic
-    let deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('pwaInstallBanner').style.display = 'flex';
-    });
-
-    function installApp() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            closeInstallBanner();
-          }
-          deferredPrompt = null;
-        });
-      } else {
-        alert('لتثبيت اللعبة: اضغط على خيارات المتصفح (⋮) ثم اختر "الإضافة إلى الشاشة الرئيسية"');
-      }
-    }
-
-    function closeInstallBanner() {
-      document.getElementById('pwaInstallBanner').style.display = 'none';
-    }
-
-    // Register Service Worker for Offline Mode
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE_NAME = 'tofiko-2026-v1';
-        self.addEventListener('install', (e) => {
-          e.waitUntil(
-            caches.open(CACHE_NAME).then((cache) => {
-              return cache.addAll(['./', 'https://cdn.tailwindcss.com', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css']);
-            })
-          );
-        });
-        self.addEventListener('fetch', (e) => {
-          e.respondWith(
-            caches.match(e.request).then((res) => res || fetch(e.request))
-          );
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-    }
-
     // Starfield Background Animation
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
@@ -483,48 +408,318 @@
     function toggleNotes() {
       isNotesMode = !isNotesMode;
       const badge = document.getElementById('notesBadge');
+      badge.className = isNotesMode ? 'absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-p  <script>
+    // Audio Engine
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, type, duration) {
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    // PWA & Offline Support
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwaInstallBanner').style.display = 'flex';
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') closeInstallBanner();
+          deferredPrompt = null;
+        });
+      } else {
+        alert('لتثبيت اللعبة: اضغط على خيارات المتصفح (⋮) ثم اختر "الإضافة إلى الشاشة الرئيسية"');
+      }
+    }
+    function closeInstallBanner() { document.getElementById('pwaInstallBanner').style.display = 'none'; }
+
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'tofiko-2026-v5';
+        self.addEventListener('install', (e) => {
+          e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
+        });
+        self.addEventListener('fetch', (e) => {
+          e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
+    // Starfield Animation
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({length: 70}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5,
+        alpha: Math.random(),
+        speed: 0.005 + Math.random() * 0.015
+      }));
+    }
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(star => {
+        star.alpha += star.speed;
+        if(star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+        ctx.fillStyle = `rgba(186, 230, 253, ${Math.abs(star.alpha)})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animateStars);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateStars();
+
+    // Players Count
+    function updatePlayersCount() {
+      let visits = parseInt(localStorage.getItem('tofiko_visits') || '0') + 1;
+      localStorage.setItem('tofiko_visits', visits);
+      const baseCounts = [51240, 52410, 50890, 53100, 51980];
+      document.getElementById('livePlayersCount').innerText = baseCounts[visits % 5].toLocaleString('ar-EG');
+    }
+    updatePlayersCount();
+
+    // Game State & 9x9 Board Data
+    let selectedCellIndex = null;
+    let isNotesMode = false;
+    let isLightningActive = true;
+    let mistakesCount = 0;
+    let score = 1000;
+    let historyStack = [];
+
+    const initialBoard = [
+      8,0,0, 0,0,0, 0,0,0,
+      0,0,3, 6,0,0, 0,0,0,
+      0,7,0, 0,9,0, 2,0,0,
+      0,5,0, 0,0,7, 0,0,0,
+      0,0,0, 4,5,7, 0,0,0,
+      0,0,1, 0,0,0, 3,0,0,
+      0,1,0, 0,0,0, 6,8,0,
+      0,0,8, 5,0,6, 0,1,0,
+      0,9,0, 0,8,6, 4,0,0
+    ];
+
+    const solutionBoard = [
+      8,1,2, 7,3,4, 5,9,6,
+      9,4,3, 6,2,5, 8,7,1,
+      6,7,5, 1,9,8, 2,3,4,
+      3,5,4, 8,1,7, 9,6,2,
+      2,8,9, 4,5,3, 1,6,7,
+      7,6,1, 2,6,9, 3,4,5,
+      4,1,7, 9,3,2, 6,8,5,
+      5,2,8, 5,4,6, 7,1,9,
+      1,9,6, 3,8,1, 4,5,3
+    ];
+
+    let currentBoard = [...initialBoard];
+    let notesBoard = Array.from({length: 81}, () => []);
+
+    const sudokuGridEl = document.getElementById('sudokuGrid');
+
+    function renderGrid() {
+      sudokuGridEl.innerHTML = '';
+      for (let i = 0; i < 81; i++) {
+        const cell = document.createElement('div');
+        const row = Math.floor(i / 9);
+        const col = i % 9;
+        
+        cell.className = `relative aspect-square flex items-center justify-center font-bold text-lg cursor-pointer transition-all duration-150 rounded-md border border-slate-800/40`;
+        
+        if (col % 3 === 2 && col !== 8) cell.classList.add('border-r-2', 'border-r-cyan-500/70');
+        if (row % 3 === 2 && row !== 8) cell.classList.add('border-b-2', 'border-b-cyan-500/70');
+
+        if (currentBoard[i] !== 0) {
+          cell.innerText = currentBoard[i];
+          if (initialBoard[i] !== 0) {
+            cell.classList.add('text-cyan-300', 'font-black');
+          } else {
+            if (currentBoard[i] === solutionBoard[i]) {
+              cell.classList.add('cell-correct');
+            } else {
+              cell.classList.add('cell-wrong');
+            }
+          }
+        } else if (notesBoard[i].length > 0) {
+          const notesGrid = document.createElement('div');
+          notesGrid.className = 'grid grid-cols-3 w-full h-full p-0.5 text-[8px] text-slate-400 font-normal leading-none pointer-events-none';
+          for (let n = 1; n <= 9; n++) {
+            const noteSpan = document.createElement('span');
+            noteSpan.className = 'flex items-center justify-center';
+            noteSpan.innerText = notesBoard[i].includes(n) ? n : '';
+            notesGrid.appendChild(noteSpan);
+          }
+          cell.appendChild(notesGrid);
+        }
+
+        cell.onclick = () => { selectCell(i); playTone(440, 'sine', 0.05); };
+        sudokuGridEl.appendChild(cell);
+      }
+      applyHighlights();
+    }
+
+    function selectCell(index) {
+      selectedCellIndex = index;
+      applyHighlights();
+    }
+
+    function applyHighlights() {
+      const cells = sudokuGridEl.children;
+      if (selectedCellIndex === null) return;
+
+      const selRow = Math.floor(selectedCellIndex / 9);
+      const selCol = selectedCellIndex % 9;
+      const selVal = currentBoard[selectedCellIndex];
+
+      for (let i = 0; i < 81; i++) {
+        const cell = cells[i];
+        const r = Math.floor(i / 9);
+        const c = i % 9;
+        
+        cell.classList.remove('cell-highlight-crosshair', 'cell-selected', 'cell-same-number');
+
+        if (r === selRow || c === selCol) {
+          cell.classList.add('cell-highlight-crosshair');
+        }
+        if (i === selectedCellIndex) {
+          cell.classList.add('cell-selected');
+        }
+        if (selVal !== 0 && currentBoard[i] === selVal) {
+          cell.classList.add('cell-same-number');
+        }
+      }
+    }
+
+    function inputNumber(num) {
+      initAudio();
+      if (selectedCellIndex === null || initialBoard[selectedCellIndex] !== 0) return;
+
+      historyStack.push({
+        index: selectedCellIndex,
+        val: currentBoard[selectedCellIndex],
+        notes: [...notesBoard[selectedCellIndex]]
+      });
+
+      if (isNotesMode) {
+        const idx = notesBoard[selectedCellIndex].indexOf(num);
+        if (idx > -1) notesBoard[selectedCellIndex].splice(idx, 1);
+        else notesBoard[selectedCellIndex].push(num);
+        currentBoard[selectedCellIndex] = 0;
+        playTone(600, 'sine', 0.08);
+      } else {
+        currentBoard[selectedCellIndex] = num;
+        notesBoard[selectedCellIndex] = [];
+
+        if (solutionBoard[selectedCellIndex] !== num) {
+          mistakesCount++;
+          score = Math.max(0, score - 50);
+          document.getElementById('mistakes').innerText = `${mistakesCount}/3`;
+          document.getElementById('score').innerText = score;
+          playTone(180, 'sawtooth', 0.2);
+          
+          if (mistakesCount >= 3) {
+            alert('انتهت المحاولات! لقد ارتكبت 3 أخطاء.');
+            resetGame();
+          }
+        } else {
+          playTone(880, 'sine', 0.15);
+        }
+      }
+      renderGrid();
+    }
+
+    function toggleLightning() {
+      initAudio();
+      isLightningActive = !isLightningActive;
+      const btn = document.getElementById('btnLightning');
+      btn.classList.toggle('bg-amber-500/20', isLightningActive);
+      playTone(520, 'triangle', 0.1);
+    }
+
+    function toggleNotes() {
+      initAudio();
+      isNotesMode = !isNotesMode;
+      const badge = document.getElementById('notesBadge');
       badge.className = isNotesMode ? 'absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse' : 'absolute top-1 left-1 w-2 h-2 rounded-full bg-slate-600';
+      playTone(550, 'sine', 0.1);
     }
 
     function erase() {
+      initAudio();
       if (selectedCellIndex === null || initialBoard[selectedCellIndex] !== 0) return;
       currentBoard[selectedCellIndex] = 0;
       notesBoard[selectedCellIndex] = [];
       renderGrid();
+      playTone(300, 'sine', 0.1);
     }
 
     function undo() {
+      initAudio();
       if (historyStack.length === 0) return;
       const lastState = historyStack.pop();
       currentBoard[lastState.index] = lastState.val;
       notesBoard[lastState.index] = lastState.notes;
       renderGrid();
+      playTone(450, 'sine', 0.1);
     }
 
     function getHint() {
+      initAudio();
       if (selectedCellIndex === null || initialBoard[selectedCellIndex] !== 0) return;
       currentBoard[selectedCellIndex] = solutionBoard[selectedCellIndex];
       renderGrid();
+      playTone(950, 'sine', 0.15);
     }
 
-    // Navigation Modals Logic
     document.getElementById('btnOpenLevels').onclick = () => {
+      initAudio();
       document.getElementById('levelsModal').classList.remove('hidden');
+      playTone(500, 'sine', 0.1);
     };
     document.getElementById('btnCloseLevels').onclick = () => {
       document.getElementById('levelsModal').classList.add('hidden');
     };
 
     function selectLevel(lvl) {
+      initAudio();
       document.getElementById('levelsModal').classList.add('hidden');
       document.getElementById('landingScreen').classList.add('hidden');
-      
-      const levelNames = {
-        easy: 'مبتدئ', simple: 'بسيط', medium: 'متوسط',
-        hard: 'صعب', expert: 'خبير', extreme: 'قصوى'
-      };
+      const levelNames = { easy: 'مبتدئ', simple: 'بسيط', medium: 'متوسط', hard: 'صعب', expert: 'خبير', extreme: 'قصوى' };
       document.getElementById('currentLevelName').innerText = `مستوى ${levelNames[lvl] || 'خبير'}`;
       resetGame();
+      playTone(700, 'sine', 0.15);
     }
 
     function resetGame() {
@@ -537,7 +732,6 @@
       renderGrid();
     }
 
-    // Initialize Grid
     renderGrid();
   </script>
 </body>
