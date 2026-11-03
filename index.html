@@ -15,9 +15,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
     
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Tajawal', sans-serif;
@@ -45,12 +43,11 @@
       100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7); }
     }
 
-    /* 9x9 Sudoku Grid Layout Precision */
     .sudoku-container {
       display: grid;
       grid-template-columns: repeat(9, 1fr);
       grid-template-rows: repeat(9, 1fr);
-      direction: ltr; /* Keeps grid indices standard left-to-right */
+      direction: ltr;
     }
 
     .sudoku-cell {
@@ -67,11 +64,9 @@
       transition: all 0.15s ease;
     }
 
-    /* Strict 3x3 Block Thicker Boundaries */
     .border-b-thick { border-bottom: 2.5px solid #38bdf8 !important; }
     .border-r-thick { border-right: 2.5px solid #38bdf8 !important; }
 
-    /* Highlights */
     .cell-highlight-crosshair { background-color: rgba(56, 189, 248, 0.15) !important; }
     .cell-selected { background-color: rgba(56, 189, 248, 0.4) !important; box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.8); }
     .cell-same-number { background-color: rgba(168, 85, 247, 0.3) !important; }
@@ -108,7 +103,7 @@
     </div>
   </div>
 
-  <!-- AADS Top Banner (Non-Overlapping Layout) -->
+  <!-- AADS Top Banner -->
   <div class="w-full max-w-md z-20 my-1 text-center overflow-hidden rounded-xl bg-slate-900/80 border border-cyan-500/20 py-1">
     <iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:100%; height:60px; overflow:hidden; margin: auto;'></iframe>
   </div>
@@ -175,7 +170,6 @@
   <!-- Main Game Container -->
   <main class="w-full max-w-md flex flex-col items-center px-2 z-10 my-auto">
     
-    <!-- Top Game Bar -->
     <div class="w-full bg-slate-900/90 border border-cyan-500/30 rounded-2xl p-2.5 mb-2 flex items-center justify-between shadow-lg">
       <div class="flex items-center gap-2">
         <button id="btnLightning" onclick="toggleLightning()" class="w-8 h-8 rounded-xl bg-slate-800 border border-amber-500/40 text-amber-400 flex items-center justify-center shadow">
@@ -222,7 +216,7 @@
       </button>
     </div>
 
-    <!-- Visible Numpad (1 to 9) -->
+    <!-- Numpad (1 to 9) -->
     <div class="w-full grid grid-cols-9 gap-1 mb-1">
       <button onclick="inputNumber(1)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">1</button>
       <button onclick="inputNumber(2)" class="aspect-square bg-slate-900/95 border border-cyan-500/40 rounded-xl font-bold text-base text-cyan-200 active:scale-90 flex items-center justify-center">2</button>
@@ -236,7 +230,7 @@
     </div>
   </main>
 
-  <!-- AADS Bottom Banner (Clean Non-Overlapping Position) -->
+  <!-- AADS Bottom Banner -->
   <div class="w-full max-w-md z-20 my-1 text-center overflow-hidden rounded-xl bg-slate-900/80 border border-cyan-500/20 py-1">
     <iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:100%; height:60px; overflow:hidden; margin: auto;'></iframe>
   </div>
@@ -292,7 +286,7 @@
 
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'tofiko-2026-v7';
+        const CACHE_NAME = 'tofiko-2026-v8';
         self.addEventListener('install', (e) => {
           e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
         });
@@ -344,7 +338,7 @@
     }
     updatePlayersCount();
 
-    // Strict 9x9 Sudoku Board State & Arrays
+    // 100% Mathematically Valid Sudoku Board Data (No Row, Column, or Box Conflicts)
     let selectedCellIndex = null;
     let isNotesMode = false;
     let isLightningActive = true;
@@ -352,28 +346,32 @@
     let score = 1000;
     let historyStack = [];
 
-    const initialBoard = [
-      8,0,0, 0,0,0, 0,0,0,
-      0,0,3, 6,0,0, 0,0,0,
-      0,7,0, 0,9,0, 2,0,0,
-      0,5,0, 0,0,7, 0,0,0,
-      0,0,0, 4,5,7, 0,0,0,
-      0,0,1, 0,0,0, 3,0,0,
-      0,1,0, 0,0,0, 6,8,0,
-      0,0,8, 5,0,6, 0,1,0,
-      0,9,0, 0,8,6, 4,0,0
+    const solutionBoard = [
+      5,3,4, 6,7,8, 9,1,2,
+      6,7,2, 1,9,5, 3,4,8,
+      1,9,8, 3,4,2, 5,6,7,
+      
+      8,5,9, 7,6,1, 4,2,3,
+      4,2,6, 8,5,3, 7,9,1,
+      7,1,3, 9,2,4, 8,5,6,
+      
+      9,6,1, 5,3,7, 2,8,4,
+      2,8,7, 4,1,9, 6,3,5,
+      3,4,5, 2,8,6, 1,7,9
     ];
 
-    const solutionBoard = [
-      8,1,2, 7,3,4, 5,9,6,
-      9,4,3, 6,2,5, 8,7,1,
-      6,7,5, 1,9,8, 2,3,4,
-      3,5,4, 8,1,7, 9,6,2,
-      2,8,9, 4,5,3, 1,6,7,
-      7,6,1, 2,4,9, 3,8,5,
-      4,1,7, 9,3,2, 6,8,5,
-      5,2,8, 5,7,6, 9,1,3,
-      1,9,6, 3,8,1, 4,2,7
+    const initialBoard = [
+      5,3,0, 0,7,0, 0,0,0,
+      6,0,0, 1,9,5, 0,0,0,
+      0,9,8, 0,0,0, 0,6,0,
+      
+      8,0,0, 0,6,0, 0,0,3,
+      4,0,0, 8,0,3, 0,0,1,
+      7,0,0, 0,2,0, 0,0,6,
+      
+      0,6,0, 0,0,0, 2,8,0,
+      0,0,0, 4,1,0, 0,0,5,
+      0,0,0, 0,8,0, 0,7,9
     ];
 
     let currentBoard = [...initialBoard];
@@ -390,13 +388,8 @@
         
         cell.className = 'sudoku-cell';
 
-        // Strict 3x3 Block Boundary Formatting
-        if (row === 2 || row === 5) {
-          cell.classList.add('border-b-thick');
-        }
-        if (col === 2 || col === 5) {
-          cell.classList.add('border-r-thick');
-        }
+        if (row === 2 || row === 5) cell.classList.add('border-b-thick');
+        if (col === 2 || col === 5) cell.classList.add('border-r-thick');
 
         if (currentBoard[i] !== 0) {
           cell.innerText = currentBoard[i];
