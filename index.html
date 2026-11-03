@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>توفيكو 2026 - سودوكو الفضاء</title>
+  
+  <link rel="manifest" href='data:application/json,{"name":"توفيكو 2026 - سودوكو","short_name":"توفيكو 2026","start_url":".","display":"standalone","background_color":"#060913","theme_color":"#060913","icons":[{"src":"https://i.ibb.co/gb6V2Kkr/t-a-f-00720261016-101616-copy-320x320.jpg","sizes":"512x512","type":"image/png"}]}'>
+  <meta name="theme-color" content="#060913">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -16,47 +22,78 @@
       -webkit-user-select: none;
     }
     
-    /* Crosshair & Focus Highlighting */
-    .cell-highlight-crosshair {
-      background-color: rgba(56, 189, 248, 0.12) !important;
-    }
-    .cell-selected {
-      background-color: rgba(56, 189, 248, 0.35) !important;
-      box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.6);
-    }
-    .cell-same-number {
-      background-color: rgba(168, 85, 247, 0.25) !important;
-    }
-    .cell-same-number-flash {
-      animation: lightningGlow 0.8s ease-in-out infinite alternate;
-    }
-    @keyframes lightningGlow {
-      0% { background-color: rgba(234, 179, 8, 0.2); box-shadow: inset 0 0 5px rgba(234, 179, 8, 0.4); }
-      100% { background-color: rgba(234, 179, 8, 0.45); box-shadow: inset 0 0 15px rgba(234, 179, 8, 0.8); }
+    .profile-avatar-gold {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid #f59e0b;
+      box-shadow: 0 0 20px #f59e0b, inset 0 0 15px #fbbf24;
+      animation: pulseGlowGold 2.2s infinite ease-in-out;
+      object-fit: cover;
     }
 
-    /* Modal Backdrop Blur */
-    .backdrop-blur-custom {
-      backdrop-filter: blur(8px);
+    @keyframes pulseGlowGold {
+      0% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7), inset 0 0 10px rgba(251, 191, 36, 0.5); }
+      50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(245, 158, 11, 1), inset 0 0 20px rgba(251, 191, 36, 0.9); }
+      100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(245, 158, 11, 0.7), inset 0 0 10px rgba(251, 191, 36, 0.5); }
     }
+
+    .cell-highlight-crosshair { background-color: rgba(56, 189, 248, 0.12) !important; }
+    .cell-selected { background-color: rgba(56, 189, 248, 0.35) !important; box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.6); }
+    .cell-same-number { background-color: rgba(168, 85, 247, 0.25) !important; }
+    .cell-correct { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80 !important; border-color: rgba(34, 197, 94, 0.5) !important; }
+    .cell-wrong { background-color: rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; border-color: rgba(239, 68, 68, 0.7) !important; animation: shakeError 0.3s ease-in-out; }
+    @keyframes shakeError { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+    .backdrop-blur-custom { backdrop-filter: blur(8px); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center overflow-x-hidden relative">
+<body class="min-h-screen flex flex-col justify-between items-center overflow-x-hidden relative pt-12 pb-16">
 
-  <!-- Dynamic Starfield Canvas Background -->
   <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
-  <!-- Landing Screen (Welcome Page) -->
-  <div id="landingScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
-    <div class="max-w-md w-full bg-slate-900/80 border border-cyan-500/30 rounded-3xl p-6 text-center shadow-2xl shadow-cyan-950">
-      <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center text-3xl text-white shadow-lg shadow-cyan-500/40 animate-pulse">
-        <i class="fa-solid fa-user-astronaut"></i>
+  <!-- BEGIN AADS AD UNIT 2460898 (رأس الصفحة) -->
+  <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;top:0;left:0;right:0;margin:auto;z-index:9000;background:rgba(6,9,19,0.95);backdrop-filter:blur(5px);border-bottom:1px solid rgba(56,189,248,0.2);padding:2px 0;">
+    <input autocomplete="off" type="checkbox" id="aadsstickymw0c0n6b" hidden />
+    <label for="aadsstickymw0c0n6b" style="top: 50%;transform: translateY(-50%);right:12px; position: absolute;border-radius: 4px; background: rgba(248, 248, 249, 0.70); padding: 3px;z-index: 9001;cursor:pointer">
+      <svg fill="#000000" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490">
+        <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "/>
+      </svg>
+    </label>
+    <div style="width: 100%;margin: auto;position: relative;"><iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div>
+    <style> #aadsstickymw0c0n6b:checked ~ div, #aadsstickymw0c0n6b:checked { display: none; } </style>
+  </div>
+  <!-- END AADS AD UNIT -->
+
+  <!-- PWA Install Banner -->
+  <div id="pwaInstallBanner" class="w-full bg-gradient-to-r from-cyan-900/90 via-slate-900/90 to-indigo-900/90 border-b border-cyan-500/40 p-2 z-40 backdrop-blur-md flex items-center justify-between shadow-lg">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center text-slate-950 font-black text-xs">
+        <i class="fa-solid fa-download"></i>
       </div>
+      <div>
+        <h4 class="text-[11px] font-bold text-cyan-200">تثبيت لعبة توفيكو 2026</h4>
+        <p class="text-[9px] text-slate-300">العب في أي وقت بدون إنترنت ⚡</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="installApp()" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-[11px] px-2.5 py-1 rounded-lg shadow-md active:scale-95">تثبيت</button>
+      <button onclick="closeInstallBanner()" class="text-slate-400 hover:text-white p-1 text-xs"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+
+  <!-- Landing Screen With Profile Avatar -->
+  <div id="landingScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
+    <div class="max-w-md w-full bg-slate-900/90 border border-cyan-500/30 rounded-3xl p-6 text-center shadow-2xl flex flex-col items-center">
+      
+      <!-- Profile Avatar Image (Fixed Direct Link) -->
+      <div class="relative my-3 flex items-center justify-center">
+        <img src="https://i.ibb.co/gb6V2Kkr/t-a-f-00720261016-101616-copy-320x320.jpg" alt="Tofiko 2026" class="profile-avatar-gold">
+      </div>
+
       <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 mb-2">توفيكو 2026</h1>
       <p class="text-xs text-cyan-200/70 mb-6">تحدي السودوكو الفضائي الفائق والمراحل المتقدمة</p>
       
-      <!-- Live Players Counter -->
-      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 mb-6 flex items-center justify-between">
+      <div class="w-full bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 mb-6 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
           <span class="text-xs text-slate-300">اللاعبون المتصلون الآن:</span>
@@ -64,38 +101,38 @@
         <span id="livePlayersCount" class="text-sm font-bold text-cyan-300 dir-ltr">52,410</span>
       </div>
 
-      <button id="btnOpenLevels" class="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-lg shadow-lg shadow-cyan-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+      <button id="btnOpenLevels" type="button" class="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg shadow-lg shadow-cyan-500/30 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
         <i class="fa-solid fa-play"></i> إبدأ اللعبة
       </button>
     </div>
   </div>
 
-  <!-- Level Selection Modal -->
-  <div id="levelsModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-custom">
-    <div class="bg-slate-900/95 border border-cyan-500/40 rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl relative animate-in fade-in zoom-in duration-200">
+  <!-- Levels Modal -->
+  <div id="levelsModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-custom">
+    <div class="bg-slate-900/95 border border-cyan-500/40 rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl">
       <h2 class="text-xl font-bold text-white mb-4">لعبة جديدة - اختر المستوى</h2>
       <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
-        <button onclick="selectLevel('easy')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('easy')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>مبتدئ</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">😊</span>
         </button>
-        <button onclick="selectLevel('simple')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('simple')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>بسيط</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">😛</span>
         </button>
-        <button onclick="selectLevel('medium')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('medium')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>متوسط</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">😳</span>
         </button>
-        <button onclick="selectLevel('hard')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('hard')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>صعب</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">😮</span>
         </button>
-        <button onclick="selectLevel('expert')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('expert')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>خبير</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">🤯</span>
         </button>
-        <button onclick="selectLevel('extreme')" class="w-full py-3 px-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold transition">
+        <button onclick="selectLevel('extreme')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl flex items-center justify-between text-slate-200 font-semibold">
           <div class="flex items-center gap-2"><span>قصوى</span> <span class="text-xs text-slate-400">Lv1</span></div>
           <span class="text-xl">😱</span>
         </button>
@@ -104,22 +141,11 @@
     </div>
   </div>
 
-  <!-- Top Banner Ad Area -->
-  <div class="w-full max-w-md my-2 px-2 z-10">
-    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-2 text-center text-xs text-slate-400 flex items-center justify-between">
-      <span class="bg-amber-500/20 text-amber-300 text-[10px] px-1.5 py-0.5 rounded border border-amber-500/30">إعلان</span>
-      <span>مساحة إعلانية علوية (Top Banner Ad)</span>
-      <i class="fa-solid fa-rectangle-ad text-slate-500"></i>
-    </div>
-  </div>
-
   <!-- Main Game Container -->
   <main class="w-full max-w-md flex flex-col items-center px-2 z-10 my-auto">
-    
-    <!-- Game Header Bar -->
     <div class="w-full bg-slate-900/80 border border-cyan-500/30 rounded-2xl p-3 mb-3 flex items-center justify-between shadow-lg">
       <div class="flex items-center gap-2">
-        <button id="btnLightning" onclick="toggleLightning()" class="w-9 h-9 rounded-xl bg-slate-800 border border-amber-500/40 text-amber-400 flex items-center justify-center transition active:scale-95 shadow" title="تفعيل نمط الصاعقة">
+        <button id="btnLightning" onclick="toggleLightning()" class="w-9 h-9 rounded-xl bg-slate-800 border border-amber-500/40 text-amber-400 flex items-center justify-center shadow">
           <i class="fa-solid fa-bolt text-lg"></i>
         </button>
         <div>
@@ -127,7 +153,6 @@
           <span class="text-[10px] text-slate-400" id="timer">00:00</span>
         </div>
       </div>
-      
       <div class="flex items-center gap-4 text-xs">
         <div class="text-center">
           <span class="block text-slate-400 text-[10px]">الأخطاء</span>
@@ -141,274 +166,50 @@
     </div>
 
     <!-- Sudoku Grid (9x9) -->
-    <div id="sudokuGrid" class="w-full aspect-square bg-slate-950 border-2 border-cyan-500/50 rounded-2xl grid grid-cols-9 p-1 gap-0.5 shadow-2xl relative overflow-hidden">
-      <!-- 81 Cells will be dynamically generated by JS -->
-    </div>
+    <div id="sudokuGrid" class="w-full aspect-square bg-slate-950 border-2 border-cyan-500/50 rounded-2xl grid grid-cols-9 p-1 gap-0.5 shadow-2xl relative overflow-hidden"></div>
 
     <!-- Action Tools Bar -->
     <div class="w-full grid grid-cols-4 gap-2 my-3">
-      <button onclick="undo()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center transition active:scale-95">
+      <button onclick="undo()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
         <i class="fa-solid fa-rotate-left text-slate-300 text-base mb-1 block"></i>
         <span class="text-[11px] text-slate-400 block">تراجع</span>
       </button>
-      <button onclick="erase()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center transition active:scale-95">
+      <button onclick="erase()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
         <i class="fa-solid fa-eraser text-slate-300 text-base mb-1 block"></i>
         <span class="text-[11px] text-slate-400 block">مسح</span>
       </button>
-      <button id="btnNotes" onclick="toggleNotes()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center transition active:scale-95 relative">
+      <button id="btnNotes" onclick="toggleNotes()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95 relative">
         <i class="fa-solid fa-pen text-slate-300 text-base mb-1 block"></i>
         <span class="text-[11px] text-slate-400 block">مسودة</span>
         <span id="notesBadge" class="absolute top-1 left-1 w-2 h-2 rounded-full bg-slate-600"></span>
       </button>
-      <button onclick="getHint()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center transition active:scale-95">
+      <button onclick="getHint()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl p-2.5 text-center active:scale-95">
         <i class="fa-solid fa-lightbulb text-amber-400 text-base mb-1 block"></i>
         <span class="text-[11px] text-slate-400 block">تلميح</span>
       </button>
     </div>
 
-    <!-- Cosmic Numpad (1 to 9) -->
+    <!-- Cosmic Numpad -->
     <div class="w-full grid grid-cols-9 gap-1 mb-2">
-      <button onclick="inputNumber(1)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">1</button>
-      <button onclick="inputNumber(2)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">2</button>
-      <button onclick="inputNumber(3)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">3</button>
-      <button onclick="inputNumber(4)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">4</button>
-      <button onclick="inputNumber(5)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">5</button>
-      <button onclick="inputNumber(6)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">6</button>
-      <button onclick="inputNumber(7)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">7</button>
-      <button onclick="inputNumber(8)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">8</button>
-      <button onclick="inputNumber(9)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 hover:border-cyan-400 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 transition flex items-center justify-center">9</button>
+      <button onclick="inputNumber(1)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">1</button>
+      <button onclick="inputNumber(2)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">2</button>
+      <button onclick="inputNumber(3)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">3</button>
+      <button onclick="inputNumber(4)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">4</button>
+      <button onclick="inputNumber(5)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">5</button>
+      <button onclick="inputNumber(6)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">6</button>
+      <button onclick="inputNumber(7)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">7</button>
+      <button onclick="inputNumber(8)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">8</button>
+      <button onclick="inputNumber(9)" class="aspect-square bg-slate-900/90 border border-cyan-500/30 rounded-xl font-bold text-lg text-cyan-200 active:scale-90 flex items-center justify-center">9</button>
     </div>
-
   </main>
 
-  <!-- Bottom Banner Ad Area -->
-  <div class="w-full max-w-md my-2 px-2 z-10">
-    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-2 text-center text-xs text-slate-400 flex items-center justify-between">
-      <span class="bg-amber-500/20 text-amber-300 text-[10px] px-1.5 py-0.5 rounded border border-amber-500/30">إعلان</span>
-      <span>مساحة إعلانية سفلية (Bottom Banner Ad)</span>
-      <i class="fa-solid fa-rectangle-ad text-slate-500"></i>
-    </div>
+  <!-- BEGIN AADS AD UNIT 2460898 (إعلان أسفل الصفحة) -->
+  <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;bottom:0;left:0;right:0;margin:auto;z-index:9000;background:rgba(6,9,19,0.95);backdrop-filter:blur(5px);border-top:1px solid rgba(56,189,248,0.2);padding:2px 0;">
+    <div style="width: 100%;margin: auto;position: relative;"><iframe data-aa=2460898 src=//acceptable.a-ads.com/2460898/?size=Adaptive style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div>
   </div>
+  <!-- END AADS AD UNIT -->
 
-  <!-- Game Logic Script -->
-  <script>
-    // Starfield Background Animation
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = Array.from({length: 70}, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.5,
-        alpha: Math.random(),
-        speed: 0.005 + Math.random() * 0.015
-      }));
-    }
-
-    function animateStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach(star => {
-        star.alpha += star.speed;
-        if(star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
-        ctx.fillStyle = `rgba(186, 230, 253, ${Math.abs(star.alpha)})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      requestAnimationFrame(animateStars);
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    animateStars();
-
-    // Dynamic Players Count Logic
-    function updatePlayersCount() {
-      let visits = parseInt(localStorage.getItem('tofiko_visits') || '0') + 1;
-      localStorage.setItem('tofiko_visits', visits);
-      
-      const baseCounts = [51240, 52410, 50890, 53100, 51980];
-      const countIndex = visits % 5;
-      document.getElementById('livePlayersCount').innerText = baseCounts[countIndex].toLocaleString('ar-EG');
-    }
-    updatePlayersCount();
-
-    // Sudoku Game State
-    let selectedCellIndex = null;
-    let isNotesMode = false;
-    let isLightningActive = true;
-    let mistakesCount = 0;
-    let score = 1000;
-    let historyStack = [];
-
-    // Puzzle Data (Expert Level Default)
-    const initialBoard = [
-      0,0,0, 0,0,0, 0,0,8,
-      0,0,0, 0,0,6, 3,0,0,
-      0,0,2, 0,9,0, 0,7,0,
-      
-      0,0,0, 7,0,0, 0,5,0,
-      0,0,7, 5,4,0, 0,0,0,
-      0,3,0, 0,0,1, 0,0,0,
-      
-      8,6,0, 0,0,0, 1,0,0,
-      0,1,0, 0,0,5, 8,0,0,
-      0,0,4, 0,8,0, 0,9,0
-    ];
-
-    const solutionBoard = [
-      5,4,1, 3,7,2, 9,6,8,
-      7,9,8, 1,5,6, 3,2,4,
-      3,6,2, 4,9,8, 5,7,1,
-      
-      1,2,9, 7,3,4, 6,5,8,
-      6,8,7, 5,4,9, 2,1,3,
-      4,3,5, 8,2,1, 7,9,6,
-      
-      8,6,3, 9,5,7, 1,4,2,
-      9,1,4, 2,6,5, 8,3,7,
-      2,5,4, 6,8,3, 7,9,1
-    ];
-
-    let currentBoard = [...initialBoard];
-    let notesBoard = Array.from({length: 81}, () => []);
-
-    // Render 9x9 Sudoku Board
-    const sudokuGridEl = document.getElementById('sudokuGrid');
-
-    function renderGrid() {
-      sudokuGridEl.innerHTML = '';
-      for (let i = 0; i < 81; i++) {
-        const cell = document.createElement('div');
-        const row = Math.floor(i / 9);
-        const col = i % 9;
-        
-        // Base Styling
-        cell.className = `relative aspect-square flex items-center justify-center font-bold text-lg cursor-pointer transition-all duration-150 rounded-md border border-slate-800/40`;
-        
-        // Thick 3x3 Box Borders
-        if (col % 3 === 2 && col !== 8) cell.classList.add('border-r-2', 'border-r-cyan-500/60');
-        if (row % 3 === 2 && row !== 8) cell.classList.add('border-b-2', 'border-b-cyan-500/60');
-
-        // Content
-        if (currentBoard[i] !== 0) {
-          cell.innerText = currentBoard[i];
-          if (initialBoard[i] !== 0) {
-            cell.classList.add('text-cyan-300', 'font-black');
-          } else {
-            cell.classList.add('text-indigo-200');
-          }
-        } else if (notesBoard[i].length > 0) {
-          // Render Pencil Notes
-          const notesGrid = document.createElement('div');
-          notesGrid.className = 'grid grid-cols-3 w-full h-full p-0.5 text-[8px] text-slate-400 font-normal leading-none pointer-events-none';
-          for (let n = 1; n <= 9; n++) {
-            const noteSpan = document.createElement('span');
-            noteSpan.className = 'flex items-center justify-center';
-            noteSpan.innerText = notesBoard[i].includes(n) ? n : '';
-            notesGrid.appendChild(noteSpan);
-          }
-          cell.appendChild(notesGrid);
-        }
-
-        cell.onclick = () => selectCell(i);
-        sudokuGridEl.appendChild(cell);
-      }
-      applyHighlights();
-    }
-
-    // Selection & Highlighting Logic
-    function selectCell(index) {
-      selectedCellIndex = index;
-      applyHighlights();
-    }
-
-    function applyHighlights() {
-      const cells = sudokuGridEl.children;
-      if (selectedCellIndex === null) return;
-
-      const selRow = Math.floor(selectedCellIndex / 9);
-      const selCol = selectedCellIndex % 9;
-      const selVal = currentBoard[selectedCellIndex];
-
-      for (let i = 0; i < 81; i++) {
-        const cell = cells[i];
-        const r = Math.floor(i / 9);
-        const c = i % 9;
-        
-        // Reset classes
-        cell.classList.remove('cell-highlight-crosshair', 'cell-selected', 'cell-same-number', 'cell-same-number-flash');
-
-        // Crosshair (Row & Column Highlight)
-        if (r === selRow || c === selCol) {
-          cell.classList.add('cell-highlight-crosshair');
-        }
-
-        // Highlight Selected Cell
-        if (i === selectedCellIndex) {
-          cell.classList.add('cell-selected');
-        }
-
-        // Lightning Mode (Highlight all cells with the same number)
-        if (selVal !== 0 && currentBoard[i] === selVal) {
-          cell.classList.add('cell-same-number');
-          if (isLightningActive) {
-            cell.classList.add('cell-same-number-flash');
-          }
-        }
-      }
-    }
-
-    // Input Number Logic
-    function inputNumber(num) {
-      if (selectedCellIndex === null || initialBoard[selectedCellIndex] !== 0) return;
-
-      historyStack.push({
-        index: selectedCellIndex,
-        val: currentBoard[selectedCellIndex],
-        notes: [...notesBoard[selectedCellIndex]]
-      });
-
-      if (isNotesMode) {
-        const idx = notesBoard[selectedCellIndex].indexOf(num);
-        if (idx > -1) notesBoard[selectedCellIndex].splice(idx, 1);
-        else notesBoard[selectedCellIndex].push(num);
-        currentBoard[selectedCellIndex] = 0;
-      } else {
-        currentBoard[selectedCellIndex] = num;
-        notesBoard[selectedCellIndex] = [];
-
-        // Check if Correct
-        if (solutionBoard[selectedCellIndex] !== num) {
-          mistakesCount++;
-          score = Math.max(0, score - 50);
-          document.getElementById('mistakes').innerText = `${mistakesCount}/3`;
-          document.getElementById('score').innerText = score;
-          
-          if (mistakesCount >= 3) {
-            alert('انتهت المحاولات! لقد ارتكبت 3 أخطاء. أعد المحاولة مرة أخرى.');
-            resetGame();
-          }
-        }
-      }
-      renderGrid();
-    }
-
-    // Action Buttons
-    function toggleLightning() {
-      isLightningActive = !isLightningActive;
-      const btn = document.getElementById('btnLightning');
-      btn.classList.toggle('bg-amber-500/20', isLightningActive);
-      applyHighlights();
-    }
-
-    function toggleNotes() {
-      isNotesMode = !isNotesMode;
-      const badge = document.getElementById('notesBadge');
-      badge.className = isNotesMode ? 'absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-p  <script>
+    <script>
     // Audio Engine
     let audioCtx = null;
     function initAudio() {
@@ -460,7 +261,7 @@
 
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'tofiko-2026-v5';
+        const CACHE_NAME = 'tofiko-2026-v6';
         self.addEventListener('install', (e) => {
           e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
         });
@@ -703,6 +504,7 @@
       playTone(950, 'sine', 0.15);
     }
 
+    // Modal & Button Listeners Fixed
     document.getElementById('btnOpenLevels').onclick = () => {
       initAudio();
       document.getElementById('levelsModal').classList.remove('hidden');
